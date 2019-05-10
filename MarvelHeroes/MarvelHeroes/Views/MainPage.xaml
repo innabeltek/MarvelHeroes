@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MarvelHeroes"
+             xmlns:extended="clr-namespace:Xamarin.Forms.Extended;assembly=Xamarin.Forms.Extended.InfiniteScrolling"
+             x:Class="MarvelHeroes.MainPage"
+             xmlns:data="using:MarvelHeroes.Droid.Models">
+
+        <ContentPage.BindingContext>
+        <local:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout>
+        <ListView ItemsSource="{Binding CharactersList}" 
+                  CachingStrategy="RecycleElement" 
+                  HasUnevenRows="True" 
+                  SelectedItem="{Binding SelectedCharacter}">
+
+            <ListView.Behaviors>
+                <extended:InfiniteScrollBehavior IsLoadingMore="{Binding IsBusy}" />
+            </ListView.Behaviors>
+           
+            <ListView.ItemTemplate>
+                <DataTemplate >
+                    <ViewCell>
+                        <Grid Padding="12">
+                            <ImageButton Source="{Binding thumbnail.small}"
+                                BackgroundColor="Transparent"
+                                WidthRequest="300"
+                                HeightRequest="300"
+                                FlexLayout.AlignSelf="Center"
+                                FlexLayout.Grow="1"
+                                Aspect="AspectFit"/>
+                            <Label Text="{Binding name}"
+                                   VerticalTextAlignment="End"
+                                   HorizontalTextAlignment ="Center"/>
+                            <Label Text="{Binding description}"
+                                    VerticalTextAlignment="Start"
+                                   HorizontalTextAlignment ="Center"
+                                   TextColor="Red"/>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+            <ListView.Footer>
+                <Grid Padding="6" IsVisible="{Binding IsBusy}">
+                    <!-- set the footer to have a zero height when invisible -->
+                    <Grid.Triggers>
+                        <Trigger TargetType="Grid" Property="IsVisible" Value="False">
+                            <Setter Property="HeightRequest" Value="0" />
+                        </Trigger>
+                    </Grid.Triggers>
+                    <!-- the loading content -->
+                    <Label Text="Loading..." TextColor="DeepPink" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" />
+                </Grid>
+            </ListView.Footer>
+
+        </ListView>
+
+    </StackLayout>
+
+</ContentPage>

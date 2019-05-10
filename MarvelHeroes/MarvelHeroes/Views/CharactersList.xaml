@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:extended="clr-namespace:Xamarin.Forms.Extended;assembly=Xamarin.Forms.Extended.InfiniteScrolling"
+             xmlns:local="clr-namespace:MarvelHeroes"
+             x:Class="MarvelHeroes.Views.CharactersList"
+             BackgroundColor="Black"
+             Title="Marvel Heroes">
+  
+        <ContentPage.BindingContext>
+            <local:MainViewModel />
+        </ContentPage.BindingContext>
+
+        <StackLayout>
+            <ListView ItemsSource="{Binding CharactersList}" 
+                      CachingStrategy="RecycleElement" 
+                      HasUnevenRows="True" 
+                      ItemTapped="OnItemSelected">
+
+                <ListView.Behaviors>
+                    <extended:InfiniteScrollBehavior IsLoadingMore="{Binding IsBusy}" />
+                </ListView.Behaviors>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate >
+                        <ViewCell>
+                        <Grid Padding="0,10,0,0">
+                                <Image Source="{Binding thumbnail.small}"
+                                WidthRequest="800"
+                                HeightRequest="230"
+                                Margin="0,0,0,50"/>
+                            <Label Text="{Binding name}"
+                                VerticalTextAlignment="End"
+                                HorizontalTextAlignment ="Center"
+                                Margin="0,0,0,10"
+                                FontSize="Large"
+                                TextColor="Goldenrod"
+                                FontAttributes="Bold"/>
+                        </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+                <ListView.Footer>
+                    <Grid Padding="6" IsVisible="{Binding IsBusy}">
+                    <Grid.Triggers >
+                            <Trigger TargetType="Grid" Property="IsVisible" Value="False">
+                                <Setter Property="HeightRequest" Value="0" />
+                            </Trigger>
+                        </Grid.Triggers>
+                        <Label Text="Heroes are comming..." TextColor="White" FontSize="20" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center" />
+                    </Grid>
+                </ListView.Footer>
+            </ListView>
+        </StackLayout>
+</ContentPage>
