@@ -67,26 +67,17 @@ namespace MarvelHeroes
         private static string GenerateHash(string timeStamp)
         {
             var toHash = timeStamp + PrivateKey + PublicKey;
-            byte[] bytes;
-            char[] c;
-            byte b;
+          
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
+            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(toHash);
+            byte[] hash = md5.ComputeHash(inputBytes);
 
-              //using (SHA1 m = new System.Security.Cryptography.SHA1Managed())
-              using (MD5 m = System.Security.Cryptography.MD5.Create())
-              {
-                  bytes = m.ComputeHash(System.Text.UTF8Encoding.UTF8.GetBytes(toHash));
-                  c = new char[bytes.Length * 2];
-                  for (int i = 0; i < bytes.Length; ++i)
-                  {
-                      b = ((byte)(bytes[i] >> 4));
-                      // replace 0x57 with 0x37 to output uppercase
-                      c[i * 2] = (char)(b > 9 ? b + 0x57 : b + 0x30);
-                      b = ((byte)(bytes[i] & 0xF));
-                      // replace 0x57 with 0x37 to output uppercase
-                      c[i * 2 + 1] = (char)(b > 9 ? b + 0x57 : b + 0x30);
-                  }
-              }
-              return new string(c);
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("x2"));
+            }
+            return sb.ToString();
         }
     }
 }

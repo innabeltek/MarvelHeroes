@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+//data that is not using in current application is commented
+//but left in code for future using
 namespace MarvelHeroes.Models
 {
     public class Thumbnail
